@@ -1,0 +1,21 @@
+.grid {
+  margin: 100px;
+  gap: 0;
+  border: 1px solid black;
+  border-bottom: none;
+  width: fit-content;
+
+  .row {
+    height: 25px;
+    border-bottom: 1px solid black;
+    width: fit-content;
+  
+    .node {
+      border-right: 1px solid black;
+      &:last-child {
+        border-right: none;
+      }
+    }
+  }
+}
+
