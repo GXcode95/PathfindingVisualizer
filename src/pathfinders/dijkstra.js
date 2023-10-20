@@ -3,6 +3,7 @@
 // We start by giving the first node a distance from 0
 // while we didn't reached a dead-end or the finishNode
   // We get the node with closest distance (0 for the start)
+  // We ignore it if it's a wall
   // We set this node as visited
   // We sore it in visitedNodes
   // We set distance of neighbors node as currNode.distance + 1
@@ -16,6 +17,10 @@ export const dijkstra = (grid, startNode, finishNode) => {
   while (unvisitedNodes.length) {
     sortNodesByDistance(unvisitedNodes);
     const closestNode = unvisitedNodes.shift();
+    
+    if (closestNode.isWall)
+      continue;
+
     const pathIsDeadEnd = closestNode.distance === Infinity
     if (pathIsDeadEnd)
       return visitedNodesInOrder

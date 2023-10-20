@@ -10,17 +10,18 @@ const FINISH_NODE_COL = 35;
 
 const  Visualizer = () => {
   const [grid, setGrid] = useState([])
+  const [mouseIsPressed, setMouseIsPressed] = useState(false)
 
   const getInitialGrid = () => {
     const grid = [];
     for (let row = 0; row < 20; row++) {
       const currentRow = [];
       for (let col = 0; col < 50; col++) {
-        currentRow.push(createNode(col, row));
+        currentRow.push(createNode(col, row))
       }
-      grid.push(currentRow);
+      grid.push(currentRow)
     }
-    return grid;
+    return grid
   };
 
   const createNode = (col, row) => {
@@ -32,25 +33,26 @@ const  Visualizer = () => {
       distance: Infinity,
       isVisited: false,
       previousNode: null,
-    };
-  };
+      isWall: false,
+    }
+  }
   
   const animateDijkstra = (visitedNodesInOrder, nodesInShortestPathOrder) => {
     for (let i = 0; i <= visitedNodesInOrder.length; i++) {
       const allNodeVisited = i === visitedNodesInOrder.length
       if (allNodeVisited) {
         setTimeout(() => {
-          animateShortestPath(nodesInShortestPathOrder);
-        }, 10 * i);
+          animateShortestPath(nodesInShortestPathOrder)
+        }, 10 * i)
     
-        return;
+        return
       }
     
       setTimeout(() => {
-        const node = visitedNodesInOrder[i];
+        const node = visitedNodesInOrder[i]
         document.getElementById(`node-${node.row}-${node.col}`).className =
-          'node node-visited';
-      }, 10 * i);
+          'node node-visited'
+      }, 10 * i)
     }
   }
 
@@ -59,8 +61,8 @@ const  Visualizer = () => {
       setTimeout(() => {
         const node = nodesInShortestPathOrder[i];
         document.getElementById(`node-${node.row}-${node.col}`).className =
-          'node node-shortest-path';
-      }, 50 * i);
+          'node node-shortest-path'
+      }, 50 * i)
     }
   }
   
@@ -71,6 +73,40 @@ const  Visualizer = () => {
     const nodesInShortestPathOrder = getNodesInShortestPathOrder(finishNode);
     
     animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder);
+  }
+
+  const newGridWithWallToggled = (grid, row, col) => {
+    const newGrid = grid.slice()
+    const node = newGrid[row][col]
+    const newNode = {
+      ...node,
+      isWall: !node.isWall,
+    }
+    newGrid[row][col] = newNode
+    
+    return newGrid
+  };
+
+  
+  const handleMouseDown = () => {
+    console.log("mousedown")  
+    setMouseIsPressed(true)
+  }
+
+  const handleMouseUp = () => {
+    console.log("mouseup")
+    setMouseIsPressed(false)
+  }
+
+  const handleMouseEnter = (row, col) => {
+    console.log("mouseEnter")
+    if (!mouseIsPressed)
+      return
+    
+      console.log("mouseEnterPressed")
+    const newGrid = newGridWithWallToggled(grid, row, col)
+    console.log('newgrid', newGrid)
+    setGrid(newGrid)
   }
 
   useEffect(() => {
@@ -87,14 +123,19 @@ const  Visualizer = () => {
             return (
               <div key={rowIdx} className="row">
                 {row.map((node, nodeIdx) => {
-                  const {row, col, isFinish, isStart} = node;
+                  const {row, col, isFinish, isStart, isWall} = node;
                   return (
                     <Node
                       key={nodeIdx}
                       col={col}
+                      row={row}
                       isFinish={isFinish}
                       isStart={isStart}
-                      row={row}></Node>
+                      isWall={isWall}
+                      onMouseDown={handleMouseDown}
+                      onMouseEnter={handleMouseEnter}
+                      onMouseUp={handleMouseUp}
+                    ></Node>
                   );
                 })}
               </div>

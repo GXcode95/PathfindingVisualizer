@@ -1,9 +1,15 @@
 .node {
   width: 25px;
   height: 25px;
-  /* outline: 1px solid #45484b; */
-  /* border: 1px solid #45484b; */
   display: inline-block;
+}
+
+.node-visited {
+  background-color: cyan;
+}
+
+.node-shortest-path {
+  background-color: yellowgreen;
 }
 
 .node-finish {
@@ -14,11 +20,10 @@
   background-color: green;
 }
 
-.node-visited {
-background-color: cyan;
-}
 
-.node-shortest-path {
-  background-color: yellowgreen;
-}
 
+
+
+.node-wall {
+  background-color: rgb(68, 58, 86);
+}
